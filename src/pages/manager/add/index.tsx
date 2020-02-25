@@ -55,17 +55,16 @@ class ManagerAdd extends Component<ManagerAddProps>{
 
         const { dispatch } = this.props;
         dispatch({
-          type: 'testModel/addNumber',
-          payload:Math.random()
+          type: 'testModel/addNum',
         });
     }
     render(){
-      const {num} = this.props
+      const {num,loading} = this.props
         return(
             <>
                 <div>
-                    <Button type="primary" onClick={this.openModel}>新增</Button>
-                <div>6666666666666{num}</div>
+                <Button type="primary" onClick={this.openModel} loading={loading}>新增</Button>
+                <h1>{num}</h1>
                 </div>
                 <Table dataSource={dataSource} columns={columns} />;
                 <Modal
@@ -108,6 +107,6 @@ export default connect(
     };
   }) => ({
       num:testModel.num,
-      loading: loading.effects['dashboardAndanalysis/fetch'],
+      loading: loading.effects['testModel/addNum'],
     })
 )(ManagerAdd);

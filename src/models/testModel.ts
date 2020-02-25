@@ -9,10 +9,21 @@ export interface TestModelType {
   };
   effects: {
     fetch?: Effect;
+    addNum:Effect
   };
   reducers: {
     addNumber: Reducer<any>;
   };
+}
+
+
+function waitsome(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve()
+    },1000)
+  })
+  
 }
 
 const UserModel: TestModelType = {
@@ -22,6 +33,17 @@ const UserModel: TestModelType = {
   },
 
   effects: {
+    *addNum(_,{call,put}){
+
+      yield call(waitsome)
+
+      yield put({
+        type: 'addNumber',
+        payload:Math.random()
+      })
+    }
+    
+
   },
 
   reducers: {
