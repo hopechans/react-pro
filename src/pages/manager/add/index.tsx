@@ -18,24 +18,12 @@ const dataSource = [
     },
   ];
   
-const columns = [
-  {
-    title: '姓名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: '年龄',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '住址',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
 
+
+
+function gogogo(){
+
+}
 interface ManagerAddProps {
   dispatch: Dispatch;
   loading: boolean;
@@ -44,7 +32,8 @@ interface ManagerAddProps {
 }
 
 class ManagerAdd extends Component<ManagerAddProps>{
-  
+
+    
     state = {
         modelVisible:false,
     }
@@ -52,14 +41,48 @@ class ManagerAdd extends Component<ManagerAddProps>{
         // this.setState({
         //     modelVisible: true,
         // });
-
         const { dispatch } = this.props;
         dispatch({
           type: 'testModel/addNum',
         });
+
+       
     }
+
+    componentDidMount(){
+
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'testModel/addNum2',
+      });
+    }
+
     render(){
+      console.log(66666)
       const {num,loading} = this.props
+
+      const columns = [
+        {
+          title: '姓名',
+          dataIndex: 'name',
+          key: 'name',
+        },
+        {
+          title: '年龄',
+          dataIndex: 'age',
+          key: 'age',
+        },
+        {
+          title: '住址',
+          dataIndex: 'address',
+          key: 'address',
+          render:(text)=>(
+              <div onClick={this.openModel}>999999999{text}</div>
+            )
+        },
+      ];
+
+
         return(
             <>
                 <div>
@@ -75,8 +98,6 @@ class ManagerAdd extends Component<ManagerAddProps>{
                 <p>Some contents...</p>
                 <p>Some contents...</p>
                 </Modal>
-
-
 
                 <Button type="primary">
                     <Link to="/manager/add/b1">Go b1</Link>
@@ -107,6 +128,6 @@ export default connect(
     };
   }) => ({
       num:testModel.num,
-      loading: loading.effects['testModel/addNum'],
+      loading: loading.effects['testModel/addNum2'],
     })
 )(ManagerAdd);

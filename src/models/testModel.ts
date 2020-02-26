@@ -9,7 +9,8 @@ export interface TestModelType {
   };
   effects: {
     fetch?: Effect;
-    addNum:Effect
+    addNum:Effect;
+    addNum2:Effect
   };
   reducers: {
     addNumber: Reducer<any>;
@@ -26,6 +27,15 @@ function waitsome(){
   
 }
 
+function waitsome2(){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve()
+    },2000)
+  })
+  
+}
+
 const UserModel: TestModelType = {
   namespace: 'testModel',
   state: {
@@ -34,9 +44,14 @@ const UserModel: TestModelType = {
 
   effects: {
     *addNum(_,{call,put}){
-
       yield call(waitsome)
-
+      yield put({
+        type: 'addNumber',
+        payload:Math.random()
+      })
+    },
+    *addNum2(_,{call,put}){
+      yield call(waitsome2)
       yield put({
         type: 'addNumber',
         payload:Math.random()
