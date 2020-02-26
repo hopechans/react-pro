@@ -3,6 +3,9 @@ import { Table, Button, Modal } from 'antd';
 import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { Link } from 'umi';
+
+import TestForm from './form'
+
 const dataSource = [
     {
       key: '1',
@@ -17,50 +20,55 @@ const dataSource = [
       address: '西湖区湖底公园1号',
     },
   ];
-  
 
-
-
-function gogogo(){
-
-}
 interface ManagerAddProps {
   dispatch: Dispatch;
   loading: boolean;
   num:number;
-  nameb:number
+  nameb:number,
 }
 
 class ManagerAdd extends Component<ManagerAddProps>{
-
-    
     state = {
         modelVisible:false,
+        testForm:''
     }
     openModel=()=>{
-        // this.setState({
-        //     modelVisible: true,
-        // });
         const { dispatch } = this.props;
         dispatch({
           type: 'testModel/addNum',
         });
+    }
+    handleOk = () => {
+      
+      const data = this.testForm.getFormData()
+      console.log(data)
+    };
 
-       
+    handleCancel = () => {
+      this.setState({
+        modelVisible: false,
+      });
+    };
+
+    openForm=()=>{
+      this.setState({
+        modelVisible:true
+      })
     }
 
     componentDidMount(){
-
       const { dispatch } = this.props;
       dispatch({
         type: 'testModel/addNum2',
       });
     }
-
+    onRef = (ref:any) => {
+      this.testForm = ref
+      console.log(this.testForm)
+    }
     render(){
-      console.log(66666)
       const {num,loading} = this.props
-
       const columns = [
         {
           title: '姓名',
@@ -76,27 +84,28 @@ class ManagerAdd extends Component<ManagerAddProps>{
           title: '住址',
           dataIndex: 'address',
           key: 'address',
-          render:(text)=>(
+          render:(text:any)=>(
               <div onClick={this.openModel}>999999999{text}</div>
             )
         },
       ];
 
-
         return(
             <>
                 <div>
                 <Button type="primary" onClick={this.openModel} loading={loading}>新增</Button>
+                &nbsp;
+                <Button type="primary" onClick={this.openForm} >弹窗</Button>
                 <h1>{num}</h1>
                 </div>
                 <Table dataSource={dataSource} columns={columns} />;
                 <Modal
                     title="Basic Modal"
                     visible={this.state.modelVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
                 >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                    <TestForm onRef={this.onRef} />
                 </Modal>
 
                 <Button type="primary">
@@ -108,14 +117,11 @@ class ManagerAdd extends Component<ManagerAddProps>{
                 <Button type="primary">
                     <Link to="/manager/add/b2">Go b2</Link>
                 </Button>
-
-
                 {this.props.children}
             </>
         )
     }
 }
-
 
 export default connect(
   ({
