@@ -19,6 +19,63 @@ const dataSource = [
       age: 42,
       address: '西湖区湖底公园1号',
     },
+    {
+      key: '3',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '4',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '6',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '5',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },{
+      key: '7',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '8',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },{
+      key: '9',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '10',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },{
+      key: '11',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '12',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },
   ];
 
 interface ManagerAddProps {
@@ -31,7 +88,9 @@ interface ManagerAddProps {
 class ManagerAdd extends Component<ManagerAddProps>{
     state = {
         modelVisible:false,
-        testForm:''
+        testForm:'',
+        current:1,
+        total:100
     }
     openModel=()=>{
         const { dispatch } = this.props;
@@ -67,6 +126,12 @@ class ManagerAdd extends Component<ManagerAddProps>{
       this.testForm = ref
       console.log(this.testForm)
     }
+    pageChange= (page:any)=>{
+      console.log(page)
+      this.setState({
+        current:page
+      })
+    }
     render(){
       const {num,loading} = this.props
       const columns = [
@@ -98,7 +163,17 @@ class ManagerAdd extends Component<ManagerAddProps>{
                 <Button type="primary" onClick={this.openForm} >弹窗</Button>
                 <h1>{num}</h1>
                 </div>
-                <Table dataSource={dataSource} columns={columns} />;
+                <Table dataSource={dataSource} columns={columns} 
+                  pagination=
+                  {{
+                    total:this.state.total,
+                    current:this.state.current,
+                    pageSize: 10,
+                    onChange:this.pageChange,
+                    showTotal: (total) => `共 ${total} 条`
+                    
+                  }}
+                />;
                 <Modal
                     title="Basic Modal"
                     visible={this.state.modelVisible}

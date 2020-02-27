@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Card, DatePicker, Input, InputNumber, Radio, Select, Tooltip } from 'antd';
+import { Button, Card, DatePicker, Input, InputNumber, Radio, Select, Tooltip,Switch } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 
@@ -64,27 +64,24 @@ class BasicForm extends Component<BasicFormProps> {
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 12 },
-        md: { span: 10 },
+        md: { span: 14 },
       },
     };
 
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
     return (
       <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="formandbasic-form.title.label" />}>
+          <Form.Item label="Switch">
+            {getFieldDecorator('switch', { valuePropName: 'checked' ,initialValue:true})(<Switch/>)}
+          </Form.Item>
+            <FormItem {...formItemLayout} label='7778333338'>
               {getFieldDecorator('title', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'formandbasic-form.title.required' }),
+                    message: 'Please input your Password!' 
                   },
                 ],
-              })(<Input placeholder={formatMessage({ id: 'formandbasic-form.title.placeholder' })} />)}
+              })(<Input placeholder="请输入。。123"/>)}
             </FormItem>
             <FormItem {...formItemLayout} label={<FormattedMessage id="formandbasic-form.date.label" />}>
               {getFieldDecorator('date', {
