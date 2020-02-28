@@ -48,6 +48,7 @@
   ],
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.0",
+    "@ant-design/dark-theme": "^1.0.3",
     "@ant-design/icons": "^4.0.0-alpha.19",
     "@ant-design/pro-layout": "4.11.0-1",
     "@ant-design/pro-table": "^1.0.22",
@@ -101,6 +102,7 @@
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
     "@types/react-helmet": "^5.0.13",
+    "@types/store": "^2.0.2",
     "@umijs/fabric": "2.0.0",
     "chalk": "^3.0.0",
     "check-prettier": "^1.0.3",

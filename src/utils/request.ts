@@ -48,9 +48,24 @@ const errorHandler = (error: { response: Response }): Response => {
 /**
  * 配置request请求时的默认参数
  */
+
+ console.log('0009')
+
+
+let token = window.localStorage.getItem('userToken') 
+
+
+console.log(token)
+
 const request = extend({
+  prefix: '/nezha',
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+  headers: {
+    'Content-Type': 'application/json;charset=UTF-8',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization':'JWT ' + token.replace(/\"/g,"")
+  },
 });
 
 export default request;

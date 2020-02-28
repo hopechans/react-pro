@@ -1,9 +1,8 @@
 import { AnyAction, Reducer } from 'redux';
 import { EffectsCommandMap } from 'dva';
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, getFakeCaptcha } from './service';
+import { fakeAccountLogin, getFakeCaptcha,Login } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
-
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
@@ -36,13 +35,17 @@ const Model: ModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      const response = yield call(Login, payload);
+      console.log(response.data)
+      const token = response.data.tokenList.accessToken
+      console.log(token)
+      localStorage.setItem('userToken',token)
+      // yield put({
+      //   type: 'changeLoginStatus',
+      //   payload: response,
+      // });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === 200) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -57,6 +60,8 @@ const Model: ModelType = {
             window.location.href = redirect;
             return;
           }
+
+        }else{
         }
         yield put(routerRedux.replace(redirect || '/'));
       }

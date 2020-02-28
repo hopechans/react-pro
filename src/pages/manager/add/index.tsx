@@ -6,6 +6,7 @@ import { Link } from 'umi';
 
 import TestForm from './form'
 
+
 const dataSource = [
     {
       key: '1',
@@ -83,15 +84,43 @@ interface ManagerAddProps {
   loading: boolean;
   num:number;
   nameb:number,
+  tableData:Array<Object>
 }
 
-class ManagerAdd extends Component<ManagerAddProps>{
+
+interface ManagerState {
+    modelVisible:boolean,
+    testForm:{
+      getFormData: Function
+    },
+    current:number,
+    total:number
+}
+
+class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
+    
     state = {
-        modelVisible:false,
-        testForm:'',
-        current:1,
-        total:100
+      modelVisible: false,
+      testForm: {
+        getFormData: Function
+      },
+      current:1,
+      total:100
     }
+
+
+    // constructor(props: any) {
+    //   super(props)
+    //   this.state = {
+    //     modelVisible: false,
+    //     testForm: {
+    //       getFormData: Function
+    //     },
+    //     current:1,
+    //     total:100
+    //   }
+    // }
+
     openModel=()=>{
         const { dispatch } = this.props;
         dispatch({
@@ -100,7 +129,7 @@ class ManagerAdd extends Component<ManagerAddProps>{
     }
     handleOk = () => {
       
-      const data = this.testForm.getFormData()
+      const data = this.state.testForm.getFormData()
       console.log(data)
     };
 
@@ -115,30 +144,39 @@ class ManagerAdd extends Component<ManagerAddProps>{
         modelVisible:true
       })
     }
-
     componentDidMount(){
       const { dispatch } = this.props;
       dispatch({
         type: 'testModel/addNum2',
       });
+
+
+      dispatch({
+        type: 'managerModel/getList',
+      });
     }
     onRef = (ref:any) => {
-      this.testForm = ref
-      console.log(this.testForm)
+      this.setState({
+        testForm:ref
+      })
+     // this.state.testForm = ref
+      //console.log(this.state.testForm)
     }
-    pageChange= (page:any)=>{
-      console.log(page)
+    pageChange= (page:number)=>{
       this.setState({
         current:page
       })
     }
     render(){
-      const {num,loading} = this.props
+      const {num,loading,tableData} = this.props
       const columns = [
         {
           title: '姓名',
           dataIndex: 'name',
           key: 'name',
+          render:(text:string,record:any,index:number)=>(
+          <Button>{text}{index}     {record.age}</Button>
+          )
         },
         {
           title: '年龄',
@@ -180,7 +218,7 @@ class ManagerAdd extends Component<ManagerAddProps>{
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <TestForm onRef={this.onRef} />
+                   <TestForm onRef={this.onRef} />
                 </Modal>
 
                 <Button type="primary">
@@ -202,13 +240,16 @@ export default connect(
   ({
     testModel,
     loading,
+    managerModel
   }: {
     testModel: any;
+    managerModel:any;
     loading: {
       effects: { [key: string]: boolean };
     };
   }) => ({
       num:testModel.num,
+      tableData:managerModel.tableData,
       loading: loading.effects['testModel/addNum2'],
     })
 )(ManagerAdd);

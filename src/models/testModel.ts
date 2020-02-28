@@ -5,7 +5,7 @@ import { Reducer } from 'redux';
 export interface TestModelType {
   namespace: string;
   state: {
-      num:number
+      num:number,
   };
   effects: {
     fetch?: Effect;
@@ -56,8 +56,8 @@ const UserModel: TestModelType = {
         type: 'addNumber',
         payload:Math.random()
       })
-    }
-    
+    },
+   
 
   },
 
@@ -68,7 +68,7 @@ const UserModel: TestModelType = {
         num: action.payload || {},
       };
     },
-
+    
   },
 };
 

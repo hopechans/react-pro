@@ -8,6 +8,14 @@ export async function fakeAccountLogin(params: FormDataType) {
   });
 }
 
+export async function Login(data:any) {
+  return request('/login/', {
+    method: 'POST',
+    data: data,
+  });
+}
+
+
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }

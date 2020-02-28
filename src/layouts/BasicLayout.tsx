@@ -10,8 +10,7 @@ import ProLayout, {
   DefaultFooter,
   SettingDrawer,
 } from '@ant-design/pro-layout';
-import { formatMessage } from 'umi-plugin-react/locale';
-import React, { useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
@@ -22,7 +21,6 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-
 
 const noMatch = (
   <Result
@@ -55,20 +53,13 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  * use Authorized check all menu item
  */
 
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => 
-  
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-
-const defaultFooterDom = (
-  <DefaultFooter
-    copyright="2020 亚美科技"
-    links={[]}
-  />
-);
+const defaultFooterDom = <DefaultFooter copyright="2020 亚美科技" links={[]} />;
 
 const footerRender: BasicLayoutProps['footerRender'] = () => {
   if (!isAntDesignPro()) {
@@ -96,6 +87,11 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
   );
 };
 
+function tony(d:any){
+  console.log(d)
+}
+
+
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const {
     dispatch,
@@ -105,10 +101,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       pathname: '/',
     },
   } = props;
-
   /**
    * constructor
    */
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -121,6 +117,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    */
 
   const handleMenuCollapse = (payload: boolean): void => {
+
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -132,12 +129,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
     authority: undefined,
   };
-
   return (
     <>
       <ProLayout
         logo={logo}
-        formatMessage={formatMessage}
         menuHeaderRender={(logoDom, titleDom) => (
           <Link to="/">
             {logoDom}
@@ -173,7 +168,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {...props}
         {...settings}
       >
-
         <Authorized authority={authorized!.authority} noMatch={noMatch}>
           {children}
         </Authorized>
