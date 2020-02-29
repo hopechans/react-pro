@@ -7,7 +7,7 @@ export const PREFIX = 'ep_';
  * @param set_time 是否设置时间
  * @returns {boolean}
  */
-export const setStore = (name, content, set_time = false, duration = 0) => {
+export const setStore = (name:string, content:string, set_time = false, duration:number = 0):boolean|void => {
     if (!name) return false;
     name = PREFIX + name;
     if (typeof content !== 'string') {
@@ -31,11 +31,12 @@ export const setStore = (name, content, set_time = false, duration = 0) => {
  * @param parse // 是否json格式化
  * @returns {boolean}
  */
-export const getStore = (name, parse = false) => {
+export const getStore = (name:string, parse = false) => {
     if (!name) return false;
     name = PREFIX + name;
     if (parse) {
-        return JSON.parse(window.localStorage.getItem(name))
+        let getName:string= <string>window.localStorage.getItem(name)
+        return JSON.parse(getName)
     }
     return window.localStorage.getItem(name)
 };
@@ -43,7 +44,7 @@ export const getStore = (name, parse = false) => {
 /**
  * 删除localStorage
  */
-export const removeStore = name => {
+export const removeStore = (name:string):boolean|void => {
     if (!name) return false;
     name = PREFIX + name;
     window.localStorage.removeItem(name)
@@ -55,13 +56,13 @@ export const removeStore = name => {
  * @param value cookie值
  * @param duration cookie有效时间，单位：小时
  */
-export const addCookie = (name, value, duration) => {
+export const addCookie = (name:string, value:string, duration:number) => {
     name = PREFIX + name;
     let n = name + '=' + escape(value) + '; path=/';
     if (duration > 0) {
         let date = new Date;
         date.setTime(date.getTime() + duration * 3600 * 1e3);
-        n = n + ';expires=' + date.toGMTString()
+        n = n + ';expires=' + date.toUTCString()
     }
     document.cookie = n
 };
@@ -71,7 +72,7 @@ export const addCookie = (name, value, duration) => {
  * @param name cookie名称
  * @returns {null}
  */
-export const getCookie = (name) => {
+export const getCookie = (name:string) => {
     name = PREFIX + name;
     let t = document.cookie;
     let a = t.split('; ');
@@ -88,10 +89,10 @@ export const getCookie = (name) => {
  * 移除cookie
  * @param name cookie名称
  */
-export const delCookie = (name) => {
+export const delCookie = (name:string) => {
     name = PREFIX + name;
     let t = new Date;
     t.setTime(t.getTime() - 1);
     let a = getCookie(name);
-    if (a !== null) document.cookie = name + '=' + a + '; path=/;expires=' + t.toGMTString()
+    if (a !== null) document.cookie = name + '=' + a + '; path=/;expires=' + t.toUTCString()
 };

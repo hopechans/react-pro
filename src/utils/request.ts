@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-
+import {getStore} from './storage'
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -49,13 +49,13 @@ const errorHandler = (error: { response: Response }): Response => {
  * 配置request请求时的默认参数
  */
 
- console.log('0009')
+interface TokenType{
+  tokenList:{
+    accessToken:string
+  }  
+}
 
-
-let token = window.localStorage.getItem('userToken') 
-
-
-console.log(token)
+ let token:TokenType = <TokenType>getStore('userData',true)
 
 const request = extend({
   prefix: '/nezha',
@@ -64,7 +64,7 @@ const request = extend({
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
     'X-Requested-With': 'XMLHttpRequest',
-    'Authorization':'JWT ' + token.replace(/\"/g,"")
+    'Authorization':'JWT '+token.tokenList.accessToken
   },
 });
 

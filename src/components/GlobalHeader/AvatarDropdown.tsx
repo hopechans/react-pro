@@ -8,7 +8,6 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-
 export interface GlobalHeaderRightProps extends ConnectProps {
   currentUser?: CurrentUser;
   menu?: boolean;
@@ -66,7 +65,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     return (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+          <Avatar size="small" className={styles.avatar} style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} src={currentUser.avatar} alt="avatar" />
           <span className={styles.name}>{currentUser.name}3333</span>
         </span>
       </HeaderDropdown>

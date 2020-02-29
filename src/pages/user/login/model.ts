@@ -3,6 +3,8 @@ import { EffectsCommandMap } from 'dva';
 import { routerRedux } from 'dva/router';
 import { fakeAccountLogin, getFakeCaptcha,Login } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
+import {setStore} from '../../../utils/storage'
+
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
@@ -36,10 +38,8 @@ const Model: ModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(Login, payload);
-      console.log(response.data)
-      const token = response.data.tokenList.accessToken
-      console.log(token)
-      localStorage.setItem('userToken',token)
+      const userData = response.data
+      setStore('userData',userData)
       // yield put({
       //   type: 'changeLoginStatus',
       //   payload: response,

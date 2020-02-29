@@ -3,6 +3,10 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
 import themePluginConfig from './themePluginConfig';
+
+import darkTheme from '@ant-design/dark-theme'
+
+
 const { pwa } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
@@ -127,12 +131,12 @@ export default {
                   path: '/dashboard/analysis',
                   component: './dashboard/analysis',
                 },
-                {
-                  name: 'monitor',
-                  icon: 'smile',
-                  path: '/dashboard/monitor',
-                  component: './dashboard/monitor',
-                },
+                // {
+                //   name: 'monitor',
+                //   icon: 'smile',
+                //   path: '/dashboard/monitor',
+                //   component: './dashboard/monitor',
+                // },
                 {
                   name: 'workplace',
                   icon: 'smile',
@@ -203,7 +207,7 @@ export default {
             {
               path: '/list',
               icon: 'table',
-              name: 'list',
+              name: '列表',
               routes: [
                 {
                   path: '/list/search',
@@ -318,7 +322,7 @@ export default {
             //   ],
             // },
             {
-              name: 'account',
+              name: '账户管理',
               icon: 'user',
               path: '/account',
               routes: [
@@ -376,7 +380,8 @@ export default {
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
-    // ...darkTheme,
+    //...darkTheme,
+    
   },
   define: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
@@ -428,4 +433,12 @@ export default {
   //     pathRewrite: { '^/server': '' },
   //   },
   // },
+
+   proxy: {
+    '/nezha': {
+      target: 'http://10.200.10.45:8000/',
+      changeOrigin: true,
+      pathRewrite: { '^/nezha': '' },
+    },
+  },
 } as IConfig;
