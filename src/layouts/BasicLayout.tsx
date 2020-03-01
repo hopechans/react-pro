@@ -8,6 +8,7 @@ import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   Settings,
   DefaultFooter,
+  PageLoading,
   SettingDrawer,
 } from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +22,13 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+import { SmileOutlined, HeartOutlined, DashboardOutlined} from '@ant-design/icons';
+
+const IconMap = {
+  smile: <SmileOutlined />,
+  heart: <HeartOutlined />,
+  dashboard:<DashboardOutlined />
+};
 
 const noMatch = (
   <Result
@@ -52,6 +60,74 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
+
+let defaultMenus:Array<object> =  [   {
+  path: '/dashboard',
+  name: 'dashboard',
+  icon: 'dashboard',
+  routes: [
+    {
+      name: 'analysis',
+      icon: 'smile',
+      path: '/dashboard/analysis',
+      component: './dashboard/analysis',
+    },
+    // {
+    //   name: 'monitor',
+    //   icon: 'smile',
+    //   path: '/dashboard/monitor',
+    //   component: './dashboard/monitor',
+    // },
+    {
+      name: 'workplace',
+      icon: 'smile',
+      path: '/dashboard/workplace',
+      component: './dashboard/workplace',
+    },
+  ],
+},{
+  path:'/manager',
+  name:'manager',
+  icon:'smile',
+  routes:[
+    
+    {
+      name:'add',
+      path:'/manager/add',
+      component:'./manager/add',
+      routes: [
+        {
+          name: 'b1',
+          path: '/manager/add',
+          component: './manager/components/b2',
+          hideInMenu:true
+        },
+        {
+          name: 'b1',
+          path: '/manager/add/b1',
+          component: './manager/components/b1',
+          hideInMenu:true
+        },
+        {
+          name: 'b2',
+          path: '/manager/add/b2',
+          component: './manager/components/b2',
+          hideInMenu:true
+        },
+       
+      ],
+    }]
+  }]
+
+
+
+const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>
+  menus.map(({ icon, children, ...item }) => ({
+    ...item,
+    icon: icon && IconMap[icon as string],
+    children: children && loopMenuItem(children),
+  }));
+
 
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map(item => {
@@ -87,9 +163,6 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
   );
 };
 
-function tony(d:any){
-  console.log(d)
-}
 
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
@@ -104,6 +177,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   /**
    * constructor
    */
+  const [menuData, setMenuData] = useState<MenuDataItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setMenuData([]);
+    setLoading(true);
+    setTimeout(() => {
+      setMenuData(defaultMenus);
+      setLoading(false);
+    }, 2000);
+  }, [index]);
 
   useEffect(() => {
     if (dispatch) {
@@ -139,6 +224,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
             {titleDom}
           </Link>
         )}
+        menuRender={(_, dom) =>
+          loading ? (
+            <div
+              style={{
+                width: 256,
+                backgroundColor:'transparent',
+                height: '100%',
+              }}
+            >
+              <PageLoading />
+            </div>
+          ) : (
+            dom
+          )
+        }
         onCollapse={handleMenuCollapse}
         menuItemRender={(menuItemProps, defaultDom) => {
           if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
@@ -163,7 +263,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           );
         }}
         footerRender={footerRender}
-        menuDataRender={menuDataRender}
+        menuDataRender={() => loopMenuItem(menuData)}
+        // menuDataRender={() => menuData}
         rightContentRender={() => <RightContent />}
         {...props}
         {...settings}

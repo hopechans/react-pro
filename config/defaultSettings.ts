@@ -55,7 +55,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '容器云平台',
+  title: 'Compass',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

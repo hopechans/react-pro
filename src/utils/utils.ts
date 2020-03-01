@@ -41,8 +41,6 @@ export const getAuthorityFromRouter = <T extends { path?: string }>(
 
 export const getRouteAuthority = (path: string, routeData: Route[]) => {
 
-  console.log(678)
-
   let authorities: string[] | string | undefined;
   routeData.forEach(route => {
     // match prefix
