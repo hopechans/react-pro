@@ -51,7 +51,7 @@ const errorHandler = (error: { response: Response }): Response => {
 
 interface TokenType{
   tokenList:{
-    accessToken:string
+    [accessToken:string]:string
   }  
 }
 

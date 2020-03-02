@@ -13,7 +13,7 @@ export interface TestModelType {
     addNum2:Effect
   };
   reducers: {
-    addNumber: Reducer<any>;
+    addNumber: Reducer;
   };
 }
 

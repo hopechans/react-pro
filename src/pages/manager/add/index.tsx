@@ -5,6 +5,8 @@ import { Dispatch } from 'redux';
 import { Link } from 'umi';
 
 import TestForm from './form'
+import { PaginationConfig } from 'antd/lib/pagination/Pagination';
+import { SorterResult } from 'antd/lib/table/interface';
 
 
 const dataSource = [
@@ -167,7 +169,18 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         current:page
       })
     }
+   
+    onChange= (pagination:PaginationConfig, filters:Record<string, React.ReactText[] | null>, sorter:SorterResult<{
+      key: string;
+      name: string;
+      age: number;
+      address: string;
+     }>, extra: any)=>{
+      console.log(sorter)
+    }
+
     render(){
+
       const {num,loading,tableData} = this.props
       const columns = [
         {
@@ -182,6 +195,7 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
           title: '年龄',
           dataIndex: 'age',
           key: 'age',
+          sorter:true
         },
         {
           title: '住址',
@@ -201,13 +215,12 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
                 <Button type="primary" onClick={this.openForm} >弹窗</Button>
                 <h1>{num}</h1>
                 </div>
-                <Table dataSource={dataSource} columns={columns} 
+                <Table dataSource={dataSource} columns={columns} onChange={this.onChange} 
                   pagination=
                   {{
                     total:this.state.total,
                     current:this.state.current,
                     pageSize: 10,
-                    onChange:this.pageChange,
                     showTotal: (total) => `共 ${total} 条`
                     
                   }}
