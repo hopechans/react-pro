@@ -21,7 +21,8 @@ const AuthComponent: React.FC<AuthComponentProps> = ({
 }) => {
   const { currentUser } = user;
   const { routes = [] } = route;
-  const isLogin = currentUser && currentUser.name;
+  const isLogin = true
+  console.log(location.pathname,route)
   return (
     <Authorized
       authority={getRouteAuthority(location.pathname, routes) || ''}

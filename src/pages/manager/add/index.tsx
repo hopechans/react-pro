@@ -7,79 +7,9 @@ import { Link } from 'umi';
 import TestForm from './form'
 import { PaginationConfig } from 'antd/lib/pagination/Pagination';
 import { SorterResult } from 'antd/lib/table/interface';
+import {fetchTableList} from './server'
 
 
-const dataSource = [
-    {
-      key: '1',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '2',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '3',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '4',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '6',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '5',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },{
-      key: '7',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '8',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },{
-      key: '9',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '10',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },{
-      key: '11',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '12',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },
-  ];
 
 interface ManagerAddProps {
   dispatch: Dispatch;
@@ -96,7 +26,9 @@ interface ManagerState {
       getFormData: Function
     },
     current:number,
-    total:number
+    total:number,
+    pageSize:number,
+    dataSource:Array<object>
 }
 
 class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
@@ -107,21 +39,10 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         getFormData: Function
       },
       current:1,
-      total:100
+      total:22,
+      pageSize:10,
+      dataSource:[]
     }
-
-
-    // constructor(props: any) {
-    //   super(props)
-    //   this.state = {
-    //     modelVisible: false,
-    //     testForm: {
-    //       getFormData: Function
-    //     },
-    //     current:1,
-    //     total:100
-    //   }
-    // }
 
     openModel=()=>{
         const { dispatch } = this.props;
@@ -152,10 +73,16 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         type: 'testModel/addNum2',
       });
 
-
-      dispatch({
-        type: 'managerModel/getList',
-      });
+      let obj = {
+        page:this.state.current,
+        pageSize:this.state.pageSize
+      }
+      // dispatch({
+      //   type: 'managerModel/getList',
+      //   payload:obj
+      // });
+      this.getTableData()
+     
     }
     onRef = (ref:any) => {
       this.setState({
@@ -169,42 +96,58 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         current:page
       })
     }
-   
-    onChange= (pagination:PaginationConfig, filters:Record<string, React.ReactText[] | null>, sorter:SorterResult<{
-      key: string;
-      name: string;
-      age: number;
-      address: string;
-     }>, extra: any)=>{
-      console.log(sorter)
+    getTableData = ()=>{
+
+      let obj = {
+        page:this.state.current,
+        pageSize:this.state.pageSize
+      }
+
+      fetchTableList(obj).then(res=>{
+        this.setState({
+          dataSource:res.data.results,
+          total:res.data.count
+        })
+      })
     }
 
+    onChange= (pagination:PaginationConfig)=>{
+      this.setState({
+        current:pagination.current,
+        pageSize:pagination.pageSize
+      })
+      console.log(pagination.current)
+      setTimeout(()=>{
+      this.getTableData()
+
+      })
+    }
+    onShowSizeChange = (current:any, pageSize:number)=>{
+      console.log(pageSize)
+      this.setState({
+        current:1,
+        pageSize:pageSize
+      })
+      setTimeout(()=>{
+        this.getTableData()
+  
+        })
+    }
     render(){
 
       const {num,loading,tableData} = this.props
       const columns = [
         {
-          title: '姓名',
-          dataIndex: 'name',
-          key: 'name',
-          render:(text:string,record:any,index:number)=>(
-          <Button>{text}{index}     {record.age}</Button>
-          )
+          title: '工单号',
+          dataIndex: 'number',
         },
         {
-          title: '年龄',
-          dataIndex: 'age',
-          key: 'age',
+          title: '工单标题',
+          dataIndex: 'title',
+          key: 'title',
           sorter:true
         },
-        {
-          title: '住址',
-          dataIndex: 'address',
-          key: 'address',
-          render:(text:any)=>(
-              <div onClick={this.openModel}>999999999{text}</div>
-            )
-        },
+        
       ];
 
         return(
@@ -215,14 +158,14 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
                 <Button type="primary" onClick={this.openForm} >弹窗</Button>
                 <h1>{num}</h1>
                 </div>
-                <Table dataSource={dataSource} columns={columns} onChange={this.onChange} 
+                <Table dataSource={this.state.dataSource} columns={columns} onChange={(pagination)=>this.onChange(pagination)}  
                   pagination=
                   {{
                     total:this.state.total,
                     current:this.state.current,
-                    pageSize: 10,
-                    showTotal: (total) => `共 ${total} 条`
-                    
+                    pageSize:this.state.pageSize,
+                    showTotal: (total) => `共 ${total} 条`,
+                    showSizeChanger:true,
                   }}
                 />;
                 <Modal
@@ -256,7 +199,13 @@ export default connect(
     managerModel
   }: {
     testModel: any;
-    managerModel:any;
+    managerModel:{
+      tableData:{
+        data:{
+          results:Array<object>
+        }
+      }
+    };
     loading: {
       effects: { [key: string]: boolean };
     };

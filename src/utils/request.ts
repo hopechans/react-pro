@@ -23,6 +23,11 @@ const codeMessage = {
   504: '网关超时。',
 };
 
+
+
+
+
+
 /**
  * 异常处理程序
  */
@@ -67,5 +72,28 @@ const request = extend({
     'Authorization':'JWT '+token.tokenList.accessToken
   },
 });
+
+
+
+// request拦截器, 改变url 或 options.
+request.interceptors.request.use((url, options) => {
+  return (
+    {
+      url: `${url}&interceptors=yes`,
+      options: { ...options, interceptors: true },
+    }
+  );
+});
+
+// response拦截器, 处理response
+request.interceptors.response.use((response) => {
+  if(response.status === 401){
+    location.href = '/user/login';
+
+  }
+  return response;
+});
+
+
 
 export default request;

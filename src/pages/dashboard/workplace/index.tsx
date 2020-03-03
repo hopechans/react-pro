@@ -90,17 +90,17 @@ const ExtraContent: React.FC<{}> = () => (
 
 class Workplace extends Component<WorkplaceProps> {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dashboardAndworkplace/init',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'dashboardAndworkplace/init',
+    // });
   }
 
   componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dashboardAndworkplace/clear',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'dashboardAndworkplace/clear',
+    // });
   }
 
   renderActivities = (item: ActivitiesType) => {

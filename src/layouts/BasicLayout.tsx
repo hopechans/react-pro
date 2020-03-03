@@ -22,12 +22,19 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-import { SmileOutlined, HeartOutlined, DashboardOutlined} from '@ant-design/icons';
-
+import { SmileOutlined, HeartOutlined, DashboardOutlined,CiOutlined,ClusterOutlined,SettingOutlined,DatabaseOutlined,CloudOutlined,AppstoreOutlined,FundProjectionScreenOutlined} from '@ant-design/icons';
+import {menu} from './menu'
 const IconMap = {
   smile: <SmileOutlined />,
   heart: <HeartOutlined />,
-  dashboard:<DashboardOutlined />
+  dashboard:<DashboardOutlined />,
+  ci:<CiOutlined />,
+  cluster:<ClusterOutlined />,
+  setting:<SettingOutlined />,
+  database:<DatabaseOutlined />,
+  cloud:<CloudOutlined />,
+  appstore:<AppstoreOutlined />,
+  fund:<FundProjectionScreenOutlined />
 };
 
 const noMatch = (
@@ -60,66 +67,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
-
-let defaultMenus:Array<object> =  [   {
-  path: '/dashboard',
-  name: 'dashboard',
-  icon: 'dashboard',
-  routes: [
-    {
-      name: 'analysis',
-      icon: 'smile',
-      path: '/dashboard/analysis',
-      component: './dashboard/analysis',
-    },
-    // {
-    //   name: 'monitor',
-    //   icon: 'smile',
-    //   path: '/dashboard/monitor',
-    //   component: './dashboard/monitor',
-    // },
-    {
-      name: 'workplace',
-      icon: 'smile',
-      path: '/dashboard/workplace',
-      component: './dashboard/workplace',
-    },
-  ],
-},{
-  path:'/manager',
-  name:'manager',
-  icon:'smile',
-  routes:[
-    
-    {
-      name:'add',
-      path:'/manager/add',
-      component:'./manager/add',
-      routes: [
-        {
-          name: 'b1',
-          path: '/manager/add',
-          component: './manager/components/b2',
-          hideInMenu:true
-        },
-        {
-          name: 'b1',
-          path: '/manager/add/b1',
-          component: './manager/components/b1',
-          hideInMenu:true
-        },
-        {
-          name: 'b2',
-          path: '/manager/add/b2',
-          component: './manager/components/b2',
-          hideInMenu:true
-        },
-       
-      ],
-    }]
-  }]
-
-
 
 const loopMenuItem = (menus: MenuDataItem[]): MenuDataItem[] =>
   menus.map(({ icon, children, ...item }) => ({
@@ -185,17 +132,17 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     setMenuData([]);
     setLoading(true);
     setTimeout(() => {
-      setMenuData(defaultMenus);
+      setMenuData(menu);
       setLoading(false);
-    }, 2000);
+    }, 300);
   }, [index]);
 
   useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'user/fetchCurrent',
+    //   });
+    // }
   }, []);
   /**
    * init variables
@@ -263,8 +210,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           );
         }}
         footerRender={footerRender}
+        
         menuDataRender={() => loopMenuItem(menuData)}
-        // menuDataRender={() => menuData}
         rightContentRender={() => <RightContent />}
         {...props}
         {...settings}

@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-export async function fetchTableList() {
-  return request('/workflow/personal_work_order/?key=&page=1&pageSize=10');
+export async function fetchTableList(params:object) {
+  return request('/workflow/master_order/?query_type=summary&key=',{params});
 }
 
 

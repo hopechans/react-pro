@@ -46,12 +46,13 @@ const Model:ModelType = {
           payload: response,
         });
       },
-      *getList(_,{call,put}){
-        const data = yield call(fetchTableList)
+      *getList({payload},{call,put}){
+        console.log(payload)
+        const data = yield call(()=>fetchTableList(payload))
         console.log(data)
         yield put({
           type: 'tableData',
-          payload:data
+          payload:data.data.results
         })
       }
     },
