@@ -39,7 +39,9 @@ const Model: ModelType = {
     *login({ payload }, { call, put }) {
       const response = yield call(Login, payload);
       const userData = response.data
-      setStore('userData',userData)
+      if(userData){
+        setStore('userData',userData)
+      }
       // yield put({
       //   type: 'changeLoginStatus',
       //   payload: response,

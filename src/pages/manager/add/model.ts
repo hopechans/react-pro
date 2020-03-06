@@ -26,7 +26,7 @@ export type Effect = (
     reducers: {
       save: Reducer;
       clear: Reducer;
-      tableData:Reducer<any>;
+      tableData1:Reducer<any>;
 
     };
   }
@@ -51,13 +51,13 @@ const Model:ModelType = {
         const data = yield call(()=>fetchTableList(payload))
         console.log(data)
         yield put({
-          type: 'tableData',
+          type: 'tableData1',
           payload:data.data.results
         })
       }
     },
     reducers: {
-      tableData(state,action){
+      tableData1(state,action){
         return {
           ...state,
           tableData: action.payload || {},

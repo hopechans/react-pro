@@ -6,7 +6,7 @@ import { router } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
-
+import {removeStore} from '@/utils/storage'
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
@@ -64,6 +64,8 @@ const Model: LoginModelType = {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
+
+        removeStore('userData')
         router.replace({
           pathname: '/user/login',
           search: stringify({

@@ -17,7 +17,7 @@ interface LoginProps {
   submitting: boolean;
 }
 interface LoginState {
-  type: string;
+  type?: string;
   autoLogin: boolean;
 }
 export interface FormDataType {
@@ -107,9 +107,7 @@ class Login extends Component<LoginProps, LoginState> {
         > 
           <Tab key="account" tab="LDAP  账户登录">
             {status === 'error' &&
-              loginType === 'account' &&
-              !submitting &&
-              this.renderMessage('账户或密码错误（admin/ant.design）')}
+              loginType === 'account' && !submitting && this.renderMessage('账户或密码错误（admin/ant.design）')}
             <UserName
               name="username"
               placeholder={`${'用户名'}: admin or user`}

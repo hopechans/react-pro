@@ -147,29 +147,51 @@ export default {
               name:'工作负载',
               icon:'cluster',
           },
-          {
-            path:'/server',
-            name:'服务',
-            icon:'cloud',
-        },
+        //   {
+        //     path:'/server',
+        //     name:'服务',
+        //     icon:'cloud',
+        // },
+        // {
+        //     path:'/application',
+        //     name:'应用',
+        //     icon:'appstore',
+        // },
+        // {
+        //     path:'/config',
+        //     name:'配置',
+        //     icon:'setting',
+        // },
+        // {
+        //     path:'/store',
+        //     name:'存储',
+        //     icon:'database',
+        // },
         {
-            path:'/application',
-            name:'应用',
-            icon:'appstore',
-        },
-        {
-            path:'/config',
-            name:'配置',
-            icon:'setting',
-        },
-        {
-            path:'/store',
-            name:'存储',
-            icon:'database',
+          path:'/tenant',
+          name:'租户管理',
+          icon:'user',
+          routes: [
+            {
+                name: '部门管理',
+                path: '/tenant/deptManager',
+                component: './tenant/dept/deptManager',
+            },
+            {
+                name: '角色权限',
+                path: '/tenant/roleManager',
+                component: './tenant/role/roleManager',
+            },
+            {
+              name: '人员管理',
+              path: '/tenant/userManager',
+              component: './tenant/user/userManager',
+          },
+          ],
         },
         {
             path:'/ci',
-            name:'CI',
+            name:'CICD',
             icon:'ci',
         },
           {
@@ -273,10 +295,10 @@ export default {
   // },
 
    proxy: {
-    '/nezha': {
-      target: 'http://10.200.10.45:8000/',
+    '/base/v1': {
+      target: 'http://10.200.100.200:8080/',
       changeOrigin: true,
-      pathRewrite: { '^/nezha': '' },
+      // pathRewrite: { '^/nezha': '' },
     },
   },
 } as IConfig;

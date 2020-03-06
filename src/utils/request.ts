@@ -55,35 +55,52 @@ const errorHandler = (error: { response: Response }): Response => {
  */
 
 interface TokenType{
-  tokenList:{
-    [accessToken:string]:string
-  }  
+  id:number,
+  token:string,
+  user:string
+}
+console.log(12233)
+let data:TokenType|null = <TokenType>getStore('userData',true)
+console.log(333)
+if(!data){
+  if(location.pathname.includes('/user/login')){
+    data = {
+      id:0,
+      token:'',
+      user:''
+    }
+  }else{
+    location.href="/user/login"
+  }
+  
 }
 
- let token:TokenType = <TokenType>getStore('userData',true)
+
+console.log(data)
+console.log(data.token)
 
 const request = extend({
-  prefix: '/nezha',
+  prefix: '/base/v1',
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
     'X-Requested-With': 'XMLHttpRequest',
-    'Authorization':'JWT '+token.tokenList.accessToken
+    'Authorization':'JWT '+data.token
   },
 });
 
 
 
 // request拦截器, 改变url 或 options.
-request.interceptors.request.use((url, options) => {
-  return (
-    {
-      url: `${url}&interceptors=yes`,
-      options: { ...options, interceptors: true },
-    }
-  );
-});
+// request.interceptors.request.use((url, options) => {
+//   return (
+//     {
+//       url: `${url}&interceptors=yes`,
+//       options: { ...options, interceptors: true },
+//     }
+//   );
+// });
 
 // response拦截器, 处理response
 request.interceptors.response.use((response) => {

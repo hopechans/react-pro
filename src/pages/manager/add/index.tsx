@@ -31,6 +31,11 @@ interface ManagerState {
     dataSource:Array<object>
 }
 
+interface PaginationType{
+  current:number,
+  pageSize:number
+}
+
 class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
     
     state = {
@@ -77,11 +82,11 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         page:this.state.current,
         pageSize:this.state.pageSize
       }
-      // dispatch({
-      //   type: 'managerModel/getList',
-      //   payload:obj
-      // });
-      this.getTableData()
+      dispatch({
+        type: 'managerModel/getList',
+        payload:obj
+      });
+     // this.getTableData()
      
     }
     onRef = (ref:any) => {
@@ -110,31 +115,26 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         })
       })
     }
-
-    onChange= (pagination:PaginationConfig)=>{
+  
+    onChange= (pagination:PaginationType)=>{
       this.setState({
         current:pagination.current,
         pageSize:pagination.pageSize
       })
-      console.log(pagination.current)
       setTimeout(()=>{
-      this.getTableData()
-
+        this.getTableData()
       })
     }
     onShowSizeChange = (current:any, pageSize:number)=>{
-      console.log(pageSize)
       this.setState({
         current:1,
         pageSize:pageSize
       })
       setTimeout(()=>{
         this.getTableData()
-  
         })
     }
     render(){
-
       const {num,loading,tableData} = this.props
       const columns = [
         {
@@ -147,18 +147,16 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
           key: 'title',
           sorter:true
         },
-        
       ];
-
         return(
             <>
                 <div>
-                <Button type="primary" onClick={this.openModel} loading={loading}>新增</Button>
-                &nbsp;
-                <Button type="primary" onClick={this.openForm} >弹窗</Button>
-                <h1>{num}</h1>
+                  <Button type="primary" onClick={this.openModel} loading={loading}>新增</Button>
+                  &nbsp;
+                  <Button type="primary" onClick={this.openForm} >弹窗</Button>
+                  <h1>{num} {JSON.stringify(tableData)}</h1>
                 </div>
-                <Table dataSource={this.state.dataSource} columns={columns} onChange={(pagination)=>this.onChange(pagination)}  
+                <Table dataSource={this.state.dataSource} columns={columns} onChange={(pagination:PaginationConfig)=>this.onChange(pagination)}  
                   pagination=
                   {{
                     total:this.state.total,
@@ -193,25 +191,28 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
 }
 
 export default connect(
-  ({
-    testModel,
-    loading,
-    managerModel
-  }: {
-    testModel: any;
-    managerModel:{
-      tableData:{
-        data:{
-          results:Array<object>
+  (
+    {
+      testModel,
+      loading,
+      managerModel
+    }: 
+    {
+      testModel: any;
+      managerModel:{
+        tableData:{
+          data:{
+            results:Array<object>
+          }
         }
-      }
-    };
-    loading: {
-      effects: { [key: string]: boolean };
-    };
-  }) => ({
-      num:testModel.num,
-      tableData:managerModel.tableData,
-      loading: loading.effects['testModel/addNum2'],
-    })
+      };
+      loading: {
+        effects: { [key: string]: boolean };
+      };
+    }
+  ) => ({
+        num:testModel.num,
+        //tableData:managerModel.tableData,
+        loading: loading.effects['testModel/addNum2'],
+      })
 )(ManagerAdd);

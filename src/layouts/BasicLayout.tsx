@@ -22,7 +22,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
-import { SmileOutlined, HeartOutlined, DashboardOutlined,CiOutlined,ClusterOutlined,SettingOutlined,DatabaseOutlined,CloudOutlined,AppstoreOutlined,FundProjectionScreenOutlined} from '@ant-design/icons';
+import { SmileOutlined, HeartOutlined, DashboardOutlined,CiOutlined,ClusterOutlined,SettingOutlined,DatabaseOutlined,CloudOutlined,AppstoreOutlined,FundProjectionScreenOutlined,UserOutlined} from '@ant-design/icons';
 import {menu} from './menu'
 const IconMap = {
   smile: <SmileOutlined />,
@@ -34,7 +34,8 @@ const IconMap = {
   database:<DatabaseOutlined />,
   cloud:<CloudOutlined />,
   appstore:<AppstoreOutlined />,
-  fund:<FundProjectionScreenOutlined />
+  fund:<FundProjectionScreenOutlined />,
+  user:<UserOutlined />
 };
 
 const noMatch = (

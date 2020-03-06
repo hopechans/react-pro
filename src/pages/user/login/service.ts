@@ -9,7 +9,7 @@ export async function fakeAccountLogin(params: FormDataType) {
 }
 
 export async function Login(data:any) {
-  return request('/login/', {
+  return request('/user/login/', {
     method: 'POST',
     data: data,
   });
