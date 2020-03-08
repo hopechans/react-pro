@@ -59,9 +59,8 @@ interface TokenType{
   token:string,
   user:string
 }
-console.log(12233)
 let data:TokenType|null = <TokenType>getStore('userData',true)
-console.log(333)
+console.log(data)
 if(!data){
   if(location.pathname.includes('/user/login')){
     data = {
@@ -75,10 +74,7 @@ if(!data){
   
 }
 
-
-console.log(data)
 console.log(data.token)
-
 const request = extend({
   prefix: '/base/v1',
   errorHandler, // 默认错误处理

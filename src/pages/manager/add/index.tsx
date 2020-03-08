@@ -4,14 +4,16 @@ import { connect } from 'dva';
 import { Dispatch } from 'redux';
 import { Link } from 'umi';
 
-import TestForm from './form'
+import TestForm from './form1'
 import { PaginationConfig } from 'antd/lib/pagination/Pagination';
 import { SorterResult } from 'antd/lib/table/interface';
 import {fetchTableList} from './server'
 
+interface BY{
+  age:number
+}
 
-
-interface ManagerAddProps {
+interface ManagerAddProps extends BY{
   dispatch: Dispatch;
   loading: boolean;
   num:number;
@@ -23,7 +25,7 @@ interface ManagerAddProps {
 interface ManagerState {
     modelVisible:boolean,
     testForm:{
-      getFormData: Function
+        getFormData: Function
     },
     current:number,
     total:number,
@@ -36,12 +38,13 @@ interface PaginationType{
   pageSize:number
 }
 
+
 class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
     
     state = {
       modelVisible: false,
-      testForm: {
-        getFormData: Function
+      testForm:{
+          getFormData: Function
       },
       current:1,
       total:22,
@@ -56,7 +59,6 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
         });
     }
     handleOk = () => {
-      
       const data = this.state.testForm.getFormData()
       console.log(data)
     };
@@ -156,7 +158,7 @@ class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
                   <Button type="primary" onClick={this.openForm} >弹窗</Button>
                   <h1>{num} {JSON.stringify(tableData)}</h1>
                 </div>
-                <Table dataSource={this.state.dataSource} columns={columns} onChange={(pagination:PaginationConfig)=>this.onChange(pagination)}  
+                <Table dataSource={this.state.dataSource} columns={columns} onChange={(pagination:any)=>this.onChange(pagination)}  
                   pagination=
                   {{
                     total:this.state.total,

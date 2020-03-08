@@ -38,7 +38,8 @@ const Model: ModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(Login, payload);
-      const userData = response.data
+      const userData = response
+      console.log(userData)
       if(userData){
         setStore('userData',userData)
       }
@@ -47,7 +48,7 @@ const Model: ModelType = {
       //   payload: response,
       // });
       // Login successfully
-      if (response.code === 200) {
+      // if (response.code === 200) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -66,7 +67,7 @@ const Model: ModelType = {
         }else{
         }
         yield put(routerRedux.replace(redirect || '/'));
-      }
+      // }
     },
 
     *getCaptcha({ payload }, { call }) {

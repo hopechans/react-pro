@@ -48,7 +48,7 @@ class Login extends Component<LoginProps, LoginState> {
       const { dispatch } = this.props;
       dispatch({
         type: 'userAndlogin/login',
-        payload: { ...values, type },
+        payload: { ...values },
       });
     }
   };
@@ -109,7 +109,7 @@ class Login extends Component<LoginProps, LoginState> {
             {status === 'error' &&
               loginType === 'account' && !submitting && this.renderMessage('账户或密码错误（admin/ant.design）')}
             <UserName
-              name="username"
+              name="name"
               placeholder={`${'用户名'}: admin or user`}
               rules={[
                 {
