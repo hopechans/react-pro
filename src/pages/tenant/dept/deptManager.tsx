@@ -2,11 +2,52 @@ import React, { Component } from 'react';
 import { Table, Tag , Input, Row, Col, Button, Modal, Popconfirm} from 'antd';
 import { PlusOutlined,ReloadOutlined} from '@ant-design/icons';
 import styles from './style.less';
+import {fetchTableList} from './server'
+
+
+interface RecordType {
+  ID:number,
+  CreatedAt?:string,
+  UpdatedAt?:string,
+  DeletedAt?:string,
+  role_group_id?:number,
+  owner_user_id?:number,
+  parent_id?:number,
+  dept_level:number,
+  dept_type:number,
+  creator?:string,
+  is_delete?:boolean,
+  dept_name:string,
+  dept_full_id?:number,
+  description?:string,
+}
+
+
+interface TableResType{
+  code:number,
+  data:{
+    total_record:number,
+    records:RecordType[]
+  },
+  msg:string
+}
+
+interface PaginationType{
+  current:number,
+  pageSize:number
+}
+
+
 class DeptManager extends Component {
 
   state={
     addModalVisible:false,
-    editModalVisible:false
+    editModalVisible:false,
+    current:1,
+    total:0,
+    pageSize:10,
+    tableData:[],
+    loading:false
   }
 
   addHandleOk = ()=>{
@@ -35,60 +76,85 @@ class DeptManager extends Component {
     })
   }
 
-  openEditModal = (record:object)=>{
-    console.log(record)
+  openEditModal = (record:RecordType)=>{
     this.setState({
       editModalVisible:true
     })
   }
 
-  deleteRecord=(record:object)=>{
-    console.log(record)
+  /**
+   * @author
+   * 删除一条记录
+   */
+  deleteRecord=(record:RecordType)=>{
+
+  }
+
+  /**
+   * @author
+   * 监听分页事件
+   */
+  onChange= (pagination:PaginationType)=>{
+    this.setState({
+      current:pagination.current,
+      pageSize:pagination.pageSize
+    })
+    setTimeout(()=>{
+      this.getTableData()
+    })
+  }
+
+  /**
+   * @author
+   *  获取表格数据
+   */
+  getTableData = ()=>{
+    let obj = {
+      page:this.state.current,
+      pageSize:this.state.pageSize
+    }
+    this.setState({
+      loading:true
+    })
+    fetchTableList(obj).then((res:TableResType)=>{
+      this.setState({
+        tableData:res.data.records,
+        total:res.data.total_record,
+        loading:false
+      })
+  }).catch(err=>{
+      console.log(err)
+  })
+  }
+
+
+  componentDidMount(){
+    this.getTableData()
   }
 
 
   render() {
     const columns = [
       {
-        title: '名称',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text:string) => <a>{text}</a>,
+        title: 'ID',
+        dataIndex: 'ID',
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '部门名称',
+        dataIndex: 'dept_name',
       },
       {
-        title: '地址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '部门类型',
+        dataIndex: 'dept_type',
       },
       {
-        title: '标签',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (tags:Array<string>) => (
-          <span>
-            {tags.map(tag => {
-              let color = tag.length > 5 ? 'geekblue' : 'green';
-              if (tag === 'loser') {
-                color = 'volcano';
-              }
-              return (
-                <Tag color={color} key={tag}>
-                  {tag.toUpperCase()}
-                </Tag>
-              );
-            })}
-          </span>
-        ),
+        title: '部门级别',
+        dataIndex: 'dept_level',
       },
       {
         title: '操作',
         key: 'action',
-        render: (text:string, record:object) => (
+        render: (text:string, record:RecordType) => (
           <span>
             <a style={{ marginRight: 16 }} onClick={()=>this.openEditModal(record)}>编辑</a>
 
@@ -105,30 +171,7 @@ class DeptManager extends Component {
         ),
       },
     ];
-    
-    const data = [
-      {
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-      {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      },
-      {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      },
-    ];
+
     return (
       <>
         <Row>
@@ -141,7 +184,17 @@ class DeptManager extends Component {
             <Button type="primary" className={styles.btnFresh} shape="circle" icon={<ReloadOutlined />} />
           </Col>
         </Row>
-        <Table columns={columns} dataSource={data} className={styles.mtTable}/>
+        <Table columns={columns} loading={this.state.loading} dataSource={this.state.tableData} className={styles.mtTable} onChange={(pagination:any)=>this.onChange(pagination)}  
+         pagination=
+            {{
+              total:this.state.total,
+              current:this.state.current,
+              pageSize:this.state.pageSize,
+              showTotal: (total) => `共 ${total} 条`,
+              showSizeChanger:true,
+            }}
+          />;
+
         <Modal
           title="添加部门"
           visible={this.state.addModalVisible}
@@ -153,15 +206,12 @@ class DeptManager extends Component {
           <p>Some contents...</p>
         </Modal>
 
-
         <Modal
           title="编辑部门"
           visible={this.state.editModalVisible}
           onOk={this.editHandleOk}
           onCancel={this.editHandleCancel}
         >
-
-          
         </Modal>
       </>
     );

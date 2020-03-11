@@ -60,7 +60,6 @@ interface TokenType{
   user:string
 }
 let data:TokenType|null = <TokenType>getStore('userData',true)
-console.log(data)
 if(!data){
   if(location.pathname.includes('/user/login')){
     data = {
@@ -71,10 +70,8 @@ if(!data){
   }else{
     location.href="/user/login"
   }
-  
 }
 
-console.log(data.token)
 const request = extend({
   prefix: '/base/v1',
   errorHandler, // 默认错误处理

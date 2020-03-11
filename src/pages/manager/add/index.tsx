@@ -39,6 +39,19 @@ interface PaginationType{
 }
 
 
+function ff<T,U,V = {}>(a:T,b:U,c:V):void{
+   console.log(a,b,c)
+}
+
+ff(1,2,true)
+
+
+
+
+
+
+
+
 class ManagerAdd extends Component<ManagerAddProps,ManagerState>{
     
     state = {
